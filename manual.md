@@ -687,6 +687,7 @@ El vendedor asignado se muestra en el encabezado (ej. "Vendedor: Pablo Alexis Or
 
 **¿Qué sucede si hago clic en el botón "Pausar" a mitad de una venta?**  
 <!-- TAG: pausar, como pausar una venta -->
+<!-- SEARCH: pausar, como pausar una venta -->
 Al pausar, el sistema ejecuta la función `PausarFactura()`. Esto guarda el documento con el estado `paused`, reserva el número correlativo y almacena una copia temporal de los productos en la variable `copia_items_facturados`, permitiéndote liberar la pantalla sin perder la información.
 
 **¿Cómo puedo recuperar una factura que dejé en pausa?**  
