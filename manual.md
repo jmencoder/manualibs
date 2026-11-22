@@ -673,7 +673,7 @@ Para soporte técnico:
 <!-- SEARCH: preguntas frecuentes FAQ ayuda dudas comunes punto de venta -->
 ## 18. Preguntas Frecuentes (FAQ)
 
-<!-- TAG: FAQ Encabezado, Estado factura, Vendedor, Pausar -->
+<!-- TAG: FAQ Encabezado, Estado factura, Vendedor, Pausar, como pausar -->
 <!-- AUDIENCE: Usuario Final, Cajero -->
 <!-- LEVEL: Basico -->
 <!-- SEARCH: estado sin imprimir impresa modificar vendedor pausar recuperar factura listado reportes -->
