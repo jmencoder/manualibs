@@ -673,10 +673,10 @@ Para soporte técnico:
 <!-- SEARCH: preguntas frecuentes FAQ ayuda dudas comunes punto de venta -->
 ## 18. Preguntas Frecuentes (FAQ)
 
-<!-- TAG: FAQ Encabezado, Estado factura, Vendedor, Pausar, como pausar -->
+<!-- TAG: FAQ Encabezado, Estado factura, Vendedor, Pausar, como pausar, como pausar una venta -->
 <!-- AUDIENCE: Usuario Final, Cajero -->
 <!-- LEVEL: Basico -->
-<!-- SEARCH: estado sin imprimir impresa modificar vendedor pausar recuperar factura listado reportes -->
+<!-- SEARCH: como pausar una venta estado sin imprimir impresa modificar vendedor pausar recuperar factura listado reportes -->
 ### 18.1 Sobre el encabezado y datos de la factura
 
 **¿Cómo cambio el estado de la factura de "Sin imprimir" a impresa?**  
@@ -686,7 +686,7 @@ El sistema gestiona internamente el estado del documento mediante la variable `s
 El vendedor asignado se muestra en el encabezado (ej. "Vendedor: Pablo Alexis Ort..."). Para cambiarlo, haga clic en el nombre del vendedor, lo cual abrirá el modal de selección de vendedores (`modal-list-vendedores`). El sistema actualiza la variable `current_seller` y refresca la información en pantalla mediante la función `ShowInfoSeller()`.
 
 **¿Qué sucede si hago clic en el botón "Pausar" a mitad de una venta?**  
-<!-- TAG: pausar -->
+<!-- TAG: pausar, como pausar una venta -->
 Al pausar, el sistema ejecuta la función `PausarFactura()`. Esto guarda el documento con el estado `paused`, reserva el número correlativo y almacena una copia temporal de los productos en la variable `copia_items_facturados`, permitiéndote liberar la pantalla sin perder la información.
 
 **¿Cómo puedo recuperar una factura que dejé en pausa?**  
