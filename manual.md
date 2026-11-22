@@ -667,6 +667,147 @@ Para soporte técnico:
 
 ---
 
+<!-- TAG: FAQ, Preguntas Frecuentes, Ayuda, Soporte -->
+<!-- AUDIENCE: Usuario Final, Cajero, Administrador -->
+<!-- LEVEL: Basico -->
+<!-- SEARCH: preguntas frecuentes FAQ ayuda dudas comunes punto de venta -->
+## 18. Preguntas Frecuentes (FAQ)
+
+<!-- TAG: FAQ Encabezado, Estado factura, Vendedor, Pausar -->
+<!-- AUDIENCE: Usuario Final, Cajero -->
+<!-- LEVEL: Basico -->
+<!-- SEARCH: estado sin imprimir impresa modificar vendedor pausar recuperar factura listado reportes -->
+### 18.1 Sobre el encabezado y datos de la factura
+
+**¿Cómo cambio el estado de la factura de "Sin imprimir" a impresa?**  
+El sistema gestiona internamente el estado del documento mediante la variable `status`. Al imprimir o guardar definitivamente, el estado cambia de `toPrint` (pendiente) a `printed` (impreso) o `saved` (guardado), lo cual se refleja visualmente en el encabezado del documento.
+
+**¿Dónde puedo modificar el nombre del Vendedor que aparece en la factura?**  
+El vendedor asignado se muestra en el encabezado (ej. "Vendedor: Pablo Alexis Ort..."). Para cambiarlo, haga clic en el nombre del vendedor, lo cual abrirá el modal de selección de vendedores (`modal-list-vendedores`). El sistema actualiza la variable `current_seller` y refresca la información en pantalla mediante la función `ShowInfoSeller()`.
+
+**¿Qué sucede si hago clic en el botón "Pausar" a mitad de una venta?**  
+Al pausar, el sistema ejecuta la función `PausarFactura()`. Esto guarda el documento con el estado `paused`, reserva el número correlativo y almacena una copia temporal de los productos en la variable `copia_items_facturados`, permitiéndote liberar la pantalla sin perder la información.
+
+**¿Cómo puedo recuperar una factura que dejé en pausa?**  
+Al iniciar una nueva factura o consultar el historial, el sistema ejecuta `ValidarSiEstaPausada()`. Si detecta un documento pausado (identificado por `invoice-paused-number`), restaura automáticamente los productos desde `copia_items_facturados` a la tabla de facturación y muestra el número de documento pausado en pantalla.
+
+**¿Dónde encuentro el "Listado de Facturas" y qué información muestra?**  
+Se accede mediante el modal `modal-history-docs`. La tabla muestra columnas como: Número, Identificador, Documento, Estado (`status`), Cliente, Fecha, Tipo (`SalesReceipt`, `Invoice`, etc.), Referencia, Saldo (`balance`), Estado de sincronización (`sync`) y acciones disponibles.
+
+**¿Para qué sirve el botón de "Reportes" ubicado en la parte superior izquierda?**  
+Despliega un menú con accesos directos a reportes del sistema, como "Listado de Facturas" (por fecha) y "Listado de Facturas Detallada" (con desglose de productos vendidos), así como opciones de "Cierres de Caja" (Cierres Z).
+
+---
+
+<!-- TAG: FAQ Clientes, Consumidor Final, RTN, Historial -->
+<!-- AUDIENCE: Usuario Final, Cajero -->
+<!-- LEVEL: Basico -->
+<!-- SEARCH: reemplazar consumidor final RTN codigo barras agregar cliente direccion automatica historial compras -->
+### 18.2 Sobre la selección de clientes (Consumidor Final)
+
+**¿Cómo reemplazo el "Consumidor Final" por un cliente registrado con RTN?**  
+Haga clic en el campo del cliente o en el ícono de usuarios para abrir el modal `modal-list-customers`. Busque al cliente por su nombre o RTN y selecciónelo. El sistema actualizará la variable `current_client` y mostrará sus datos fiscales.
+
+**¿Qué función cumple el ícono del código de barras al lado del buscador de clientes?**  
+Permite realizar una búsqueda rápida escaneando o ingresando el código de identificación fiscal (RTN o Identidad) del cliente, ya que el sistema valida estos datos en los campos `DataExtName='RTN'` o `DataExtName='identidad'` de QuickBooks.
+
+**¿Cómo agrego un cliente nuevo si no aparece en la búsqueda rápida?**  
+Dentro del modal de clientes, existe un botón de acción (ej. "Nuevo" o `customer-new-profile`) que permite crear un registro de cliente nuevo, el cual se sincronizará con QuickBooks al guardarse.
+
+**¿Por qué el campo "Dirección" se llena automáticamente al seleccionar un cliente?**  
+Al seleccionar un cliente, la función `ShowInfoCustomer()` extrae automáticamente la dirección almacenada en QuickBooks (`current_client.BillAddress.Addr1`) y la muestra en el contenedor de información complementaria (`#complemento-informativo`).
+
+**¿Cómo puedo consultar el historial de compras de un cliente específico desde esta pantalla?**  
+Desde el modal de historial de documentos (`modal-history-docs`), puede filtrar la tabla utilizando el campo de búsqueda por el nombre del cliente o su ID, lo que mostrará todas las facturas (`SalesReceipt` o `Invoice`) asociadas a ese `ListID`.
+
+---
+
+<!-- TAG: FAQ Productos, Agregar, Bodega, Cantidad, Descuento, Eliminar -->
+<!-- AUDIENCE: Usuario Final, Cajero -->
+<!-- LEVEL: Basico -->
+<!-- SEARCH: agregar productos sin lector codigos iconos edificio caja calculadora seleccionar bodega modificar cantidad precio eliminar -->
+### 18.3 Sobre la selección y manejo de productos
+
+**¿Cómo agrego productos al detalle de la factura si no tengo un lector de códigos?**  
+Haga clic en el ícono `➕` o en una fila vacía de la tabla de productos. Esto abrirá el modal `modal-list-items`, donde puede buscar el producto por nombre, seleccionar la categoría (Inventario, Servicios o Todo) y hacer clic en la fila para agregarlo.
+
+**¿Qué significan los íconos debajo del buscador de clientes (el edificio, la caja, la calculadora)?**  
+- **Edificio:** Selector de Bodega/Sucursal (`select_site`), para definir de dónde se descontará el inventario.
+- **Caja:** Acceso rápido al listado de Items/Productos.
+- **Calculadora:** Acceso a funciones de totales, descuentos o ajustes financieros del documento.
+
+**¿Cómo selecciono la "Bodega" correcta antes de empezar a agregar productos a la tabla?**  
+Haga clic en el botón desplegable que muestra el nombre de la bodega actual (ej. "01 SUCURSAL PRINCIPAL") en la barra inferior o en el área de filtros. Esto actualiza la variable `select_site` y filtra las existencias (`QtyOnStock`) visibles en el modal de productos.
+
+**¿Cómo modifico la cantidad o el precio de un producto directamente en la tabla de detalles?**  
+Las celdas de "Cant." y "Precio" en la tabla (`dt-basic-example`) son editables. Al hacer clic y modificar el valor, el sistema actualiza el array `productos_facturados` y recalcula los totales automáticamente mediante la función `TotalizarDocumento()`.
+
+**¿Cómo aplico un descuento a un producto específico en la columna "Descuento"?**  
+Haga clic en la celda de la columna "Descuento" de la fila correspondiente. Ingrese el monto o porcentaje. El sistema recalcula el `total_sin_descuento` de esa línea y actualiza los totales globales.
+
+**¿Cómo elimino un producto que ya agregué por error a la lista de la factura?**  
+Seleccione la fila del producto en la tabla de detalles y utilice el botón o ícono de eliminación (papelera) asociado a la fila. Esto ejecuta la función `rows().remove()` de DataTables y actualiza el array `productos_facturados`.
+
+---
+
+<!-- TAG: FAQ Totales, Descuento Doc, ISV, Exonerado, Total 0 -->
+<!-- AUDIENCE: Usuario Final, Cajero, Administrador -->
+<!-- LEVEL: Intermedio -->
+<!-- SEARCH: descuento doc diferencia gravado 15 isv 15 importe exonerado total pagar 0.00 -->
+### 18.4 Sobre los totales y descuentos
+
+**¿Cómo funciona el campo "Descuento Doc." en la parte inferior derecha?**  
+Permite aplicar un descuento global al documento. Al ingresar un valor, el sistema lo almacena en la variable `base["discount"] = {percentage: ...}` y lo refleja visualmente con la etiqueta `#text-discount-doc`, recalculando el total final.
+
+**¿Cuál es la diferencia entre aplicar un descuento en la columna del producto vs. el descuento a nivel de documento?**  
+- **Descuento en columna:** Afecta únicamente al total de esa línea específica (producto).
+- **Descuento Doc.:** Es un descuento porcentual o monto que se aplica sobre el subtotal general de toda la factura antes de calcular los impuestos finales.
+
+**¿Cómo se calcula el "IMPORTE GRAVADO 15%" y el "I.S.V 15%" en el panel de totales?**  
+La función `TotalizarDocumento()` suma los valores de los productos que no están marcados como exentos. Sobre esa suma (`GravadosTotales`), aplica matemáticamente el 15% para generar el valor del "I.S.V 15%".
+
+**¿Qué tipo de productos hacen que se modifique la línea de "IMPORTE EXONERADO"?**  
+Los productos configurados en QuickBooks con la etiqueta fiscal `tax_type="EXE"` (Exento) o aquellos asociados a un cliente con configuraciones especiales de exoneración (`compraExcenta`, `regExonerado`).
+
+**¿Por qué el "TOTAL A PAGAR" se muestra en 0.00 actualmente?**  
+Porque la función `ClearTotals()` inicializa los valores en cero al crear un documento nuevo, y el total solo se actualiza cuando se agrega al menos un producto al array `productos_facturados` y se ejecuta el cálculo de totales.
+
+---
+
+<!-- TAG: FAQ Acciones finales, Revertir, Aplicar, Recurrencia, CAI, Bodega, Formatos, QB, Tasa -->
+<!-- AUDIENCE: Usuario Final, Cajero, Administrador -->
+<!-- LEVEL: Intermedio -->
+<!-- SEARCH: boton revertir aplicar facturar cobrar nueva recurrencia CAI sucursal bodega formatos series QB tasa cambio -->
+### 18.5 Sobre las acciones finales y herramientas inferiores
+
+**¿Para qué sirve el botón "Revertir" al lado del campo de descuento?**  
+Su función es deshacer la última acción realizada o limpiar el campo de entrada actual (por ejemplo, borrar el monto ingresado en "Descuento Doc." o revertir la última modificación en la tabla).
+
+**¿Qué diferencia hay entre el botón "Aplicar" y los botones de la esquina inferior derecha (Facturar/Cobrar)?**  
+- **Aplicar:** Abre el modal de "Términos de Pago" (`modal-pay-method`) para seleccionar el método de pago (Efectivo, Tarjeta, Crédito, etc.) y registrar el monto recibido.
+- **Facturar/Cobrar (Imprimir):** Finaliza el proceso, envía los datos a QuickBooks (mediante `SavePrintedDocument` o `UpdatePrintedDocument`) y lanza la vista previa de impresión.
+
+**¿Qué hace la opción "Nueva Recurrencia" en la esquina inferior izquierda?**  
+Abre el modal `modal-recurrence` para configurar la factura actual como una plantilla recurrente (`recurrence_to_save`), permitiendo programar su generación automática en fechas futuras para uno o varios clientes.
+
+**¿Dónde puedo ver o modificar el CAI (H21412-...) que aparece en el pie de página?**  
+Haga clic directamente sobre el texto del CAI en la barra inferior. Esto abrirá el modal de autorizaciones (`table-list-authorization`), donde se muestra el rango autorizado (`desde` y `hasta`), la fecha límite y el último documento emitido.
+
+**¿Cómo cambio la sucursal o bodega principal que indica "01 SUCURSAL PRINCIPAL" en la barra inferior?**  
+Haga clic en el nombre de la bodega para desplegar el menú `dropdown-bodegas`. Al seleccionar otra opción, el sistema actualiza la variable `select_site` y recarga las existencias de productos correspondientes a esa ubicación.
+
+**¿Qué significan las abreviaturas "Formatos: N/A" y "Series registradas" en la esquina inferior derecha?**  
+- **Formatos: N/A:** Indica que no se ha asignado una plantilla de impresión específica (`formato_activo`) para este documento o usuario.
+- **Series registradas:** Hace referencia a la variable `series_registradas`. Si un producto tiene `serials_setting="1"`, el sistema exigirá ingresar los números de serie únicos antes de permitir la facturación.
+
+**¿Qué significan las siglas "QB" que aparecen en naranja al lado del nombre del sistema?**  
+Indican el modo de integración activo con QuickBooks. "QB" significa **QuickBooks Desktop** (sincronización local mediante conector), mientras que "QBO" indicaría **QuickBooks Online** (sincronización en la nube vía API). Esto se controla mediante la variable `OnlineOrDesktop`.
+
+**¿Cómo puedo consultar la "Tasa" de cambio si necesito facturar en otra moneda?**  
+La tasa de cambio se muestra en la barra inferior (ej. "Tasa: N/A" o un valor numérico). El sistema la obtiene de la variable `currencyRate` o `online-exchange-rate-value`. Si está habilitada la multi-moneda, este campo se puede editar para ajustar el tipo de cambio del documento antes de finalizar.
+
+---
+
 *© 2026 Integral Business Solutions. Todos los derechos reservados.*  
 *Documento generado el 22 de noviembre de 2026*  
 *Versión 1.0 - Basado en documentación técnica y capturas de pantalla*
