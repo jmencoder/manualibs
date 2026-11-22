@@ -702,10 +702,11 @@ Despliega un menú con accesos directos a reportes del sistema, como "Listado de
 <!-- TAG: FAQ Clientes, Consumidor Final, RTN, Historial -->
 <!-- AUDIENCE: Usuario Final, Cajero -->
 <!-- LEVEL: Basico -->
-<!-- SEARCH: reemplazar consumidor final RTN codigo barras agregar cliente direccion automatica historial compras -->
+<!-- SEARCH: seleccionar cliente reemplazar consumidor final RTN codigo barras agregar cliente direccion automatica historial compras -->
 ### 18.2 Sobre la selección de clientes (Consumidor Final)
 
 **¿Cómo reemplazo el "Consumidor Final" por un cliente registrado con RTN?**  
+<!-- TAG: Como seleccionar cliente -->
 Haga clic en el campo del cliente o en el ícono de usuarios para abrir el modal `modal-list-customers`. Busque al cliente por su nombre o RTN y selecciónelo. El sistema actualizará la variable `current_client` y mostrará sus datos fiscales.
 
 **¿Qué función cumple el ícono del código de barras al lado del buscador de clientes?**  
